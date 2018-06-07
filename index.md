@@ -1,25 +1,105 @@
 ---
-title       : 
+title       : An app to predict timber volume
 subtitle    : 
-author      : 
+author      : Rachel Karpman
 job         : 
-framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+framework   : io2012   # {io2012, html5slides, shower, dzslides, ...}
 highlighter : highlight.js  # {highlight.js, prettify, highlight}
 hitheme     : tomorrow      # 
-widgets     : []            # {mathjax, quiz, bootstrap}
+widgets     : [bootstrap]            # {mathjax, quiz, bootstrap}
 mode        : selfcontained # {standalone, draft}
 knit        : slidify::knit2slides
 ---
 
-## Read-And-Delete
+<style>
+.title-slide {
+  background-color: #FAF0E6;
+  color: #654321;
+}
 
-1. Edit YAML front matter
-2. Write using R Markdown
-3. Use an empty line followed by three dashes to separate slides!
+.title-slide hgroup > h1 {
+    color: #006400;
+}
 
---- .class #id 
+slide:not(.segue) {
+    background-color: #FAF0E6;
+    color: #654321;
+}
 
-## Slide 2
+
+slide:not(.segue) h2{
+    color: #006400;
+}
+
+</style>
+
+## Introduction
+
+* Estimating the volume of trees is important for anyone who harvests timber, either for their own use or commercially.
+
+    + Since trees have complex shapes, measuring their volume directly is difficult
+
+* `Timber Volume` is a `Shiny` app that predicts a tree's volume from its height and girth.
+
+### The `trees` data set
+
+* We build a model using the `trees` data set, which contains the height, girth, and timber volume of 31 felled cherry trees.
+
+    + Girth is diameter of the tree trunk, measured at 4 feet 6 inches above the ground
+    + Height is measured in feet, girth is in inches, and volume is in cubic feet.
+
+---
+## Modeling timber volume
+
+* We model timber volume as a linear function of `Height * Girth^2`.
+    
+    + This is similar to the volume formula for cones and cylinders.
+
+
+```r
+model <- lm(Volume ~ I(Girth^2 * Height), data = trees)
+```
+
+* For example, if girth is 10 inches and height is 70 feet, we can use this model to predict timber volume using the code below.
+
+
+```r
+newVolume <- predict(model, data.frame(Girth = 10, Height = 70))
+newVolume
+```
+
+```
+##        1 
+## 14.57294
+```
+
+We get an estimated volume of 14.57 cubic feet.
+
+--- 
+
+## Using the app
+
+* The `Timber Volume` app has a simple interface.
+
+    + A `Documentation` tab contains instructions for new users.
+
+* The user selects the desired girth and height with sliders.
+
+    + Predicted volume is calculated and displayed automatically
+
+* The app also displays a plot of height versus girth for each point in the `trees` dataset, and for user's tree.
+
+    + Point size represents volume (observed or predicted).
+
+--- 
+
+## A data visualization
+
+* The figure shows similar to the one displayed by the Timber Volume app.
+
+    + The brown circle represents a predicted tree with height 70 feet and girth 10 inches, and predicted volume 14.57 cubic feet.
+
+<img src="figure/unnamed-chunk-3-1.png" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" style="display: block; margin: auto;" />
 
 
 
